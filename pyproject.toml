@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=41", "wheel", "setuptools_scm[toml]>=6.2", "numpy"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools-git-versioning]
+enabled = true
+
+[project]
+name = "genomeplot"
+authors = [
+    {name = "Wouter Saelens", email = "wouter.saelens@gmail.com"},
+]
+description = "High-definition modeling of (single-cell) chromatin + transcriptomics data"
+requires-python = ">=3.8"
+keywords = ["bioinformatics", "chromatin accessibility", "transcriptomics"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "matplotlib",
+    "numpy",
+]
+dynamic = ["version", "readme"]
+license = {text = "MIT"}
+
+[project.urls]
+"Homepage" = "https://github.com/probabilistic-cell/genomeplot"
+"Bug Tracker" = "https://github.com/probabilistic-cell/genomeplot/issues"
+
+[tool.setuptools.dynamic]
+readme = {file = "README.md", content-type = "text/markdown"}
+
+[project.optional-dependencies]
+sam = [
+    "pysam",
+]
+dev = [
+    "pytest",
+]
+test = [
+    "pytest",
+    "ruff",
+]
+full = ["genomeplot[sam]"]
+
+[tool.setuptools_scm]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore",
+]
+
+[tool.pylint.'MESSAGES CONTROL']
+max-line-length = 120
+disable = [
+    "too-many-arguments",
+    "not-callable",
+    "redefined-builtin",
+    "redefined-outer-name",
+]
+
+[tool.ruff]
+line-length = 500
+ignore-init-module-imports = true
+ignore = ['F401']
+include = ['src/**/*.py']
+exclude = ['scripts/*']
