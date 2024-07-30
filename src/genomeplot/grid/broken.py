@@ -1,4 +1,4 @@
-from chromatinhd.grid.grid import Grid, Panel
+from genomeplot.grid.grid import Grid, Panel
 import numpy as np
 import pandas as pd
 import dataclasses
