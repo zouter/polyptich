@@ -10,9 +10,9 @@ name = "eyck"
 authors = [
     {name = "Wouter Saelens", email = "wouter.saelens@gmail.com"},
 ]
-description = "High-definition modeling of (single-cell) chromatin + transcriptomics data"
+description = "Extra visualization functions"
 requires-python = ">=3.8"
-keywords = ["bioinformatics", "chromatin accessibility", "transcriptomics"]
+keywords = ["visualization"]
 classifiers = [
     "Programming Language :: Python :: 3",
 ]
@@ -31,9 +31,6 @@ license = {text = "MIT"}
 readme = {file = "README.md", content-type = "text/markdown"}
 
 [project.optional-dependencies]
-sam = [
-    "pysam",
-]
 dev = [
     "pytest",
 ]
@@ -41,7 +38,6 @@ test = [
     "pytest",
     "ruff",
 ]
-full = ["eyck[sam]"]
 
 [tool.setuptools_scm]
 
