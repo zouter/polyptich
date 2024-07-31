@@ -1,6 +1,7 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+from typing import List, Optional, Tuple
 
 active_fig = None
 
@@ -152,21 +153,21 @@ class Wrap(Element):
 
     def __init__(
         self,
-        ncol=6,
-        padding_width=0.5,
-        padding_height=None,
-        margin_height=0.5,
-        margin_width=0.5,
-    ):
-        self.ncol = ncol
-        self.padding_width = padding_width
-        self.padding_height = padding_height if padding_height is not None else padding_width
-        self.margin_width = margin_width
-        self.margin_height = margin_height
-        self.elements = []
-        self.pos = (0, 0)
+        ncol: int = 6,
+        padding_width: float = 0.5,
+        padding_height: Optional[float] = None,
+        margin_height: float = 0.5,
+        margin_width: float = 0.5,
+    ) -> None:
+        self.ncol: int = ncol
+        self.padding_width: float = padding_width
+        self.padding_height: Optional[float] = padding_height if padding_height is not None else padding_width
+        self.margin_width: float = margin_width
+        self.margin_height: float = margin_height
+        self.elements: List[Element] = []
+        self.pos: Tuple[int, int] = (0, 0)
 
-    def add(self, element):
+    def add(self, element: Element):
         self.elements.append(element)
         return element
 
@@ -232,6 +233,10 @@ class Wrap(Element):
 
 
 class WrapAutobreak(Wrap):
+    """
+    Wraps panels if the size exeeds a maximum width
+    """
+
     title = None
 
     def __init__(
@@ -295,26 +300,28 @@ class Grid(Element):
 
     def __init__(
         self,
-        nrow=1,
-        ncol=1,
-        padding_width=0.5,
-        padding_height=None,
-        margin_height=0.5,
-        margin_width=0.5,
-    ):
+        nrow: int = 1,
+        ncol: int = 1,
+        padding_width: float = 0.5,
+        padding_height: Optional[float] = None,
+        margin_height: float = 0.5,
+        margin_width: float = 0.5,
+    ) -> None:
         self.padding_width = padding_width
         self.padding_height = padding_height if padding_height is not None else padding_width
         self.margin_width = margin_width
         self.margin_height = margin_height
-        self.elements = [[None for _ in range(ncol)] for _ in range(nrow)]
+        self.elements: List[List[Optional[Element]]] = [[None for _ in range(ncol)] for _ in range(nrow)]
 
-        self.pos = (0, 0)
+        self.pos: Tuple[int, int] = (0, 0)
 
-        self.nrow = nrow
-        self.ncol = ncol
+        self.nrow: int = nrow
+        self.ncol: int = ncol
 
-        self.paddings_height = [None] * (nrow)
-        self.paddings_width = [None] * (ncol)
+        self.paddings_height: List[Optional[float]] = [None] * (nrow)
+        self.paddings_width: List[Optional[float]] = [None] * (ncol)
+
+        self.elements = []
 
     def align(self):
         width = 0
@@ -493,7 +500,7 @@ class _Figure(mpl.figure.Figure):
 
     def plot(self):
         """
-        Align all panels within the figure
+        Align and position all elements in the figure
         """
 
         self.main.align()
@@ -517,22 +524,23 @@ class _Figure(mpl.figure.Figure):
             new_bbox = mpl.figure.Bbox(
                 np.array(
                     [
-                        (current_axis_bounds[0] - (new_bounds[0] / current_size[0]))
-                        / ((new_bounds[2] - new_bounds[0]) / current_size[0]),
-                        (current_axis_bounds[1] - (new_bounds[1] / current_size[1]))
-                        / ((new_bounds[3] - new_bounds[1]) / current_size[1]),
-                        (current_axis_bounds[2] - (new_bounds[0] / current_size[0]))
-                        / ((new_bounds[2] - new_bounds[0]) / current_size[0]),
-                        (current_axis_bounds[3] - (new_bounds[1] / current_size[1]))
-                        / ((new_bounds[3] - new_bounds[1]) / current_size[1]),
+                        (current_axis_bounds[0] - (new_bounds[0] / current_size[0])) / ((new_bounds[2] - new_bounds[0]) / current_size[0]),
+                        (current_axis_bounds[1] - (new_bounds[1] / current_size[1])) / ((new_bounds[3] - new_bounds[1]) / current_size[1]),
+                        (current_axis_bounds[2] - (new_bounds[0] / current_size[0])) / ((new_bounds[2] - new_bounds[0]) / current_size[0]),
+                        (current_axis_bounds[3] - (new_bounds[1] / current_size[1])) / ((new_bounds[3] - new_bounds[1]) / current_size[1]),
                     ]
                 ).reshape((2, 2))
             )
             ax.set_position(new_bbox)
 
 
-def Figure(main, *args, **kwargs):
+def Figure(main: Element, *args, **kwargs):
     """
     Create a figure with panel support
+
+    Parameters
+    ----------
+    main : Element
+        The main panel of the figure. All other panels are a child of this panel
     """
     return plt.figure(*args, main=main, **kwargs, FigureClass=_Figure)
