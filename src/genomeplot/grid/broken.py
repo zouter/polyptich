@@ -1,4 +1,4 @@
-from genomeplot.grid.grid import Grid, Panel
+from eyck.grid.grid import Grid, Panel
 import numpy as np
 import pandas as pd
 import dataclasses
@@ -111,9 +111,7 @@ class TransformBroken:
         regions["width"] = regions["end"] - regions["start"]
         regions["ix"] = np.arange(len(regions))
 
-        regions["cumstart"] = (np.pad(np.cumsum(regions["width"])[:-1], (1, 0))) + regions[
-            "ix"
-        ] * breaking.gap * breaking.resolution
+        regions["cumstart"] = (np.pad(np.cumsum(regions["width"])[:-1], (1, 0))) + regions["ix"] * breaking.gap * breaking.resolution
         regions["cumend"] = np.cumsum(regions["width"]) + regions["ix"] * breaking.gap / breaking.resolution
 
         self.regions = regions
