@@ -321,8 +321,6 @@ class Grid(Element):
         self.paddings_height: List[Optional[float]] = [None] * (nrow)
         self.paddings_width: List[Optional[float]] = [None] * (ncol)
 
-        self.elements = []
-
     def align(self):
         width = 0
         height = 0
