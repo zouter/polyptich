@@ -532,9 +532,12 @@ class _Figure(mpl.figure.Figure):
             )
             ax.set_position(new_bbox)
 
-    def savefig(self, *args, dpi=300, bbox_inches="tight", **kwargs):
+    def savefig(self, *args, dpi=300, bbox_inches="tight", interactive = True, **kwargs):
         self.plot()
         super().savefig(*args, dpi=dpi, bbox_inches=bbox_inches, **kwargs)
+        if interactive:
+            import IPython.display
+            return IPython.display.Image(args[0])
 
 
 def Figure(main: Element, *args, **kwargs):

@@ -103,8 +103,14 @@ class Ax(Element):
             inset.position(
                 fig,
                 pos=(
-                    x + (width - inset.dim[0]) * inset_anchor[0] + (width) * inset_position[0] + inset_offset[0],
-                    y + (height - inset.dim[1]) * inset_anchor[1] + (height) * inset_position[1] + inset_offset[1],
+                    x
+                    + (width - inset.dim[0]) * inset_anchor[0]
+                    + (width) * inset_position[0]
+                    + inset_offset[0],
+                    y
+                    + (height - inset.dim[1]) * inset_anchor[1]
+                    + (height) * inset_position[1]
+                    + inset_offset[1],
                 ),
             )
 
@@ -161,7 +167,9 @@ class Wrap(Element):
     ) -> None:
         self.ncol: int = ncol
         self.padding_width: float = padding_width
-        self.padding_height: Optional[float] = padding_height if padding_height is not None else padding_width
+        self.padding_height: Optional[float] = (
+            padding_height if padding_height is not None else padding_width
+        )
         self.margin_width: float = margin_width
         self.margin_height: float = margin_height
         self.elements: List[Element] = []
@@ -311,7 +319,9 @@ class Grid(Element):
         self.padding_height = padding_height if padding_height is not None else padding_width
         self.margin_width = margin_width
         self.margin_height = margin_height
-        self.elements: List[List[Optional[Element]]] = [[None for _ in range(ncol)] for _ in range(nrow)]
+        self.elements: List[List[Optional[Element]]] = [
+            [None for _ in range(ncol)] for _ in range(nrow)
+        ]
 
         self.pos: Tuple[int, int] = (0, 0)
 
@@ -494,6 +504,7 @@ class _Figure(mpl.figure.Figure):
         self.main = main
         global active_fig
         active_fig = self
+        self.plot_hooks = []
         super().__init__(*args, **kwargs)
 
     def plot(self):
@@ -504,6 +515,8 @@ class _Figure(mpl.figure.Figure):
         self.main.align()
         self.set_size_inches(*self.main.dim)
         self.main.position(self)
+        for hook in self.plot_hooks:
+            hook()
         return self
 
     def set_tight_bounds(self):
@@ -523,18 +536,36 @@ class _Figure(mpl.figure.Figure):
             new_bbox = mpl.figure.Bbox(
                 np.array(
                     [
-                        (current_axis_bounds[0] - (new_bounds[0] / current_size[0])) / ((new_bounds[2] - new_bounds[0]) / current_size[0]),
-                        (current_axis_bounds[1] - (new_bounds[1] / current_size[1])) / ((new_bounds[3] - new_bounds[1]) / current_size[1]),
-                        (current_axis_bounds[2] - (new_bounds[0] / current_size[0])) / ((new_bounds[2] - new_bounds[0]) / current_size[0]),
-                        (current_axis_bounds[3] - (new_bounds[1] / current_size[1])) / ((new_bounds[3] - new_bounds[1]) / current_size[1]),
+                        (current_axis_bounds[0] - (new_bounds[0] / current_size[0]))
+                        / ((new_bounds[2] - new_bounds[0]) / current_size[0]),
+                        (current_axis_bounds[1] - (new_bounds[1] / current_size[1]))
+                        / ((new_bounds[3] - new_bounds[1]) / current_size[1]),
+                        (current_axis_bounds[2] - (new_bounds[0] / current_size[0]))
+                        / ((new_bounds[2] - new_bounds[0]) / current_size[0]),
+                        (current_axis_bounds[3] - (new_bounds[1] / current_size[1]))
+                        / ((new_bounds[3] - new_bounds[1]) / current_size[1]),
                     ]
                 ).reshape((2, 2))
             )
             ax.set_position(new_bbox)
 
-    def savefig(self, *args, dpi=300, bbox_inches="tight", **kwargs):
+    def savefig(self, *args, dpi=300, bbox_inches="tight", display=True, **kwargs):
         self.plot()
+
+        plt.close()
+
         super().savefig(*args, dpi=dpi, bbox_inches=bbox_inches, **kwargs)
+
+        import IPython
+
+        if IPython.get_ipython() is not None and display:
+            IPython.display.display(IPython.display.Image(args[0], retina=True))
+
+    def display(self):
+        import tempfile
+
+        file = tempfile.NamedTemporaryFile(suffix=".png")
+        self.savefig(file.name, display=True)
 
 
 def Figure(main: Element, *args, **kwargs):
