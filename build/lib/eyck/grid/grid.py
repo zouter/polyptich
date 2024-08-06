@@ -321,8 +321,6 @@ class Grid(Element):
         self.paddings_height: List[Optional[float]] = [None] * (nrow)
         self.paddings_width: List[Optional[float]] = [None] * (ncol)
 
-        self.elements = []
-
     def align(self):
         width = 0
         height = 0
@@ -506,6 +504,7 @@ class _Figure(mpl.figure.Figure):
         self.main.align()
         self.set_size_inches(*self.main.dim)
         self.main.position(self)
+        return self
 
     def set_tight_bounds(self):
         """
@@ -532,6 +531,10 @@ class _Figure(mpl.figure.Figure):
                 ).reshape((2, 2))
             )
             ax.set_position(new_bbox)
+
+    def savefig(self, *args, dpi=300, bbox_inches="tight", **kwargs):
+        self.plot()
+        super().savefig(*args, dpi=dpi, bbox_inches=bbox_inches, **kwargs)
 
 
 def Figure(main: Element, *args, **kwargs):
