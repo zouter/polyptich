@@ -1,1 +1,1 @@
-# Eyck
+# polyptich

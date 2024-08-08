@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 enabled = true
 
 [project]
-name = "eyck"
+name = "polyptich"
 authors = [
     {name = "Wouter Saelens", email = "wouter.saelens@gmail.com"},
 ]
@@ -24,8 +24,8 @@ dynamic = ["version", "readme"]
 license = {text = "MIT"}
 
 [project.urls]
-"Homepage" = "https://github.com/probabilistic-cell/eyck"
-"Bug Tracker" = "https://github.com/probabilistic-cell/eyck/issues"
+"Homepage" = "https://github.com/probabilistic-cell/polyptich"
+"Bug Tracker" = "https://github.com/probabilistic-cell/polyptich/issues"
 
 [tool.setuptools.dynamic]
 readme = {file = "README.md", content-type = "text/markdown"}

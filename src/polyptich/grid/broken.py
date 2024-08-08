@@ -1,4 +1,4 @@
-from eyck.grid.grid import Grid, Panel
+from polyptich.grid.grid import Grid, Panel
 import numpy as np
 import pandas as pd
 import dataclasses
@@ -58,7 +58,9 @@ class BrokenGrid(Grid):
     A grid build from distinct regions that are using the same coordinate space
     """
 
-    def __init__(self, breaking, height=0.5, padding_height=0.05, margin_height=0.0, *args, **kwargs):
+    def __init__(
+        self, breaking, height=0.5, padding_height=0.05, margin_height=0.0, *args, **kwargs
+    ):
         super().__init__(padding_width=breaking.gap, margin_height=margin_height, *args, **kwargs)
 
         regions = breaking.regions
@@ -111,8 +113,12 @@ class TransformBroken:
         regions["width"] = regions["end"] - regions["start"]
         regions["ix"] = np.arange(len(regions))
 
-        regions["cumstart"] = (np.pad(np.cumsum(regions["width"])[:-1], (1, 0))) + regions["ix"] * breaking.gap * breaking.resolution
-        regions["cumend"] = np.cumsum(regions["width"]) + regions["ix"] * breaking.gap / breaking.resolution
+        regions["cumstart"] = (np.pad(np.cumsum(regions["width"])[:-1], (1, 0))) + regions[
+            "ix"
+        ] * breaking.gap * breaking.resolution
+        regions["cumend"] = (
+            np.cumsum(regions["width"]) + regions["ix"] * breaking.gap / breaking.resolution
+        )
 
         self.regions = regions
         self.resolution = breaking.resolution
@@ -139,7 +145,9 @@ class TransformBroken:
         if isinstance(x, (int, float, np.float64, np.int64)):
             x = np.array([x])
 
-        match = (x[:, None] >= self.regions["start"].values) & (x[:, None] <= self.regions["end"].values)
+        match = (x[:, None] >= self.regions["start"].values) & (
+            x[:, None] <= self.regions["end"].values
+        )
 
         argmax = np.argmax(
             match,
@@ -149,7 +157,9 @@ class TransformBroken:
 
         # argmax[allzero] = np.nan
 
-        y = self.regions.iloc[argmax]["cumstart"].values + (x - self.regions.iloc[argmax]["start"].values)
+        y = self.regions.iloc[argmax]["cumstart"].values + (
+            x - self.regions.iloc[argmax]["start"].values
+        )
         y[allzero] = np.nan
 
         return y

@@ -10,14 +10,14 @@ git tag -a v${version} -m "v${version}"
 python -m build
 
 # optional: upload test
-# twine upload --repository testpypi dist/eyck-${version}.tar.gz --verbose
+# twine upload --repository testpypi dist/polyptich-${version}.tar.gz --verbose
 
 git push --tags
 
 # conda install gh --channel conda-forge
-gh release create v${version} -t "v${version}" -n "v${version}" dist/eyck-${version}.tar.gz
+gh release create v${version} -t "v${version}" -n "v${version}" dist/polyptich-${version}.tar.gz
 
 # pip install twine
-twine upload dist/eyck-${version}.tar.gz --verbose
+twine upload dist/polyptich-${version}.tar.gz --verbose
 
 python -m build --wheel
