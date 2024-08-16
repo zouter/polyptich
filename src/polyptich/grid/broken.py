@@ -93,19 +93,13 @@ def add_slanted_x(ax1, ax2, size=4, **kwargs):
 
 
 class TransformBroken:
-    def __init__(self, breaking, width=None):
+    def __init__(self, breaking):
         """
         Transforms from data coordinates to (broken) data coordinates
 
         Parameters
         ----------
-        breaking : pd.DataFrame
-            Regions to break
-        resolution : float
-            Resolution of the data to go from data to points
-        gap : float
-            Gap between the regions in points
-
+        breaking : Breaking
         """
 
         regions = breaking.regions

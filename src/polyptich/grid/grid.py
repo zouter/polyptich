@@ -22,21 +22,45 @@ class Element:
     def height(self):
         return self.dim[1]
 
+    def initialize(self, fig):
+        self.fig = fig
+
 
 TITLE_HEIGHT = 0.3
 AXIS_WIDTH = AXIS_HEIGHT = 0.0
 
 
 class Ax(Element):
+    """
+    A panel with an axis
+
+    Parameters
+    ----------
+
+    """
+
     ax2 = None
     insets = None
+    fig = None
 
-    def __init__(self, dim=None, pos=(0.0, 0.0)):
-        global active_fig
-        self.ax = mpl.figure.Axes(active_fig, [0, 0, 1, 1])
+    def __init__(self, dim:tuple=None, pos:tuple=(0.0, 0.0), fig=None):
         self.dim = dim
         self.pos = pos
+        self.ax = mpl.figure.Axes.__new__(mpl.figure.Axes)
 
+        if fig is None:
+            global active_fig
+            if active_fig is not None:
+                fig = active_fig
+            else:
+                fig = plt.gcf()
+            
+        self.fig = fig
+        self.ax.__init__(fig, [0, 0, 1, 1])
+
+    def initialize(self, fig):
+        pass
+        
     @property
     def dim(self):
         return self._dim
@@ -153,9 +177,22 @@ class Title(Panel):
 class Wrap(Element):
     """
     Grid-like layout with a fixed number of columns that will automatically wrap panels in the next row
+
+    Parameters
+    ----------
+            The number of columns in the grid. Defaults to 6.
+        padding_width : float, optional
+            The width padding between elements in the grid. Defaults to 0.5.
+        padding_height : float, optional
+            The height padding between elements in the grid. If not provided, it defaults to the value of padding_width. Defaults to None.
+        margin_height : float, optional
+            The height margin around the grid. Defaults to 0.5.
+        margin_width : float, optional
+            The width margin around the grid. Defaults to 0.5.
     """
 
     title = None
+    fig = None
 
     def __init__(
         self,
@@ -164,7 +201,7 @@ class Wrap(Element):
         padding_height: Optional[float] = None,
         margin_height: float = 0.5,
         margin_width: float = 0.5,
-    ) -> None:
+    ):
         self.ncol: int = ncol
         self.padding_width: float = padding_width
         self.padding_height: Optional[float] = (
@@ -176,7 +213,11 @@ class Wrap(Element):
         self.pos: Tuple[int, int] = (0, 0)
 
     def add(self, element: Element):
+        """
+        Add an element to the grid
+        """
         self.elements.append(element)
+        element.initialize(self.fig)
         return element
 
     def align(self):
@@ -237,7 +278,6 @@ class Wrap(Element):
         nrow = (len(self.elements) - 1) // self.ncol
         ix = (nrow) * self.ncol
         return self.elements[ix]
-        # return self.elements[self.ncol * ((len(self.elements) % self.ncol) - 1)]
 
 
 class WrapAutobreak(Wrap):
@@ -463,7 +503,17 @@ class Grid(Element):
         if (self.ncol == 1) and (self[0, 0] is None):
             column = 0
         else:
-            column = self.ncol
+            if row < self.nrow:
+                # get first empty element
+                for i, el_ in enumerate(self.elements[row]):
+                    if el_ is None:
+                        column = i
+                        break
+                else:
+                    column = self.ncol
+            else:
+                # if the row does not exist => col is just 0
+                column = 0
 
         # get column index if row is a panel
         if "grid.Element" in row.__class__.__mro__.__repr__():
@@ -506,6 +556,7 @@ class _Figure(mpl.figure.Figure):
         active_fig = self
         self.plot_hooks = []
         super().__init__(*args, **kwargs)
+        main.initialize(self)
 
     def plot(self):
         """
@@ -558,7 +609,7 @@ class _Figure(mpl.figure.Figure):
 
         import IPython
 
-        if IPython.get_ipython() is not None and display:
+        if IPython.get_ipython() is not None and display and not str(args[0]).endswith(".pdf"):
             IPython.display.display(IPython.display.Image(args[0], retina=True))
 
     def display(self):
