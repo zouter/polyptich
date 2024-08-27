@@ -12,6 +12,8 @@ class Breaking:
 
     @property
     def width(self):
+        if "length" not in self.regions.columns:
+            self.regions["length"] = self.regions["end"] - self.regions["start"]
         return (self.regions["length"] / self.resolution).sum() + self.gap * (len(self.regions) - 1)
 
 

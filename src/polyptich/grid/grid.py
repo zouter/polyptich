@@ -500,6 +500,14 @@ class Grid(Element):
         return el
 
     def add_right(self, el, row=0, padding=None):
+        # get row
+        if "grid.Element" in row.__class__.__mro__.__repr__():
+            try:
+                row = np.array(self.elements).flatten().tolist().index(row) // self.ncol
+            except ValueError as e:
+                raise ValueError("The panel specified as row was not found in the grid") from e
+
+        # get col
         if (self.ncol == 1) and (self[0, 0] is None):
             column = 0
         else:
@@ -514,13 +522,6 @@ class Grid(Element):
             else:
                 # if the row does not exist => col is just 0
                 column = 0
-
-        # get column index if row is a panel
-        if "grid.Element" in row.__class__.__mro__.__repr__():
-            try:
-                row = np.array(self.elements).flatten().tolist().index(row) // self.ncol
-            except ValueError as e:
-                raise ValueError("The panel specified as row was not found in the grid") from e
 
         self[row, column] = el
         if padding is not None:
