@@ -1,8 +1,10 @@
 # %% [markdown]
 # ## Polyptich: easier layouting in matplotlib
 
-# %% 
+# %%
 import polyptich as pp
+
+# %% tags=["remove-output", "hide-input"]
 pp.setup_ipython()
 
 # %%

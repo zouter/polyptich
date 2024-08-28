@@ -3,7 +3,6 @@
 
 ```python
 import polyptich as pp
-pp.setup_ipython()
 ```
 
 
