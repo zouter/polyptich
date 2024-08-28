@@ -1,13 +1,11 @@
-## Polyptich: easier layouting in matplotlib
+# %% [markdown]
+# ## Polyptich: easier layouting in matplotlib
 
-
-```python
+# %% 
 import polyptich as pp
 pp.setup_ipython()
-```
 
-
-```python
+# %%
 fig = pp.Figure()
 ax = pp.Panel((2, 2))
 ax.plot([1, 2, 3], [1, 2, 3])
@@ -21,16 +19,8 @@ ax = pp.Panel((2, 2))
 ax.plot([1, 2, 3], [1, 2, 3])
 fig.main.add_right(ax)
 fig.display()
-```
 
-
-    
-![png](README_files/README_2_0.png)
-    
-
-
-
-```python
+# %%
 fig = pp.Figure()
 ax1 = pp.Panel((2, 2))
 ax1.plot([1, 2, 3], [1, 2, 3])
@@ -54,15 +44,5 @@ legend.axis("off")
 
 fig.main = title / (ax1 | ax2) / (ax3 | ax4) / legend
 fig.display()
-```
 
-
-    
-![png](README_files/README_3_0.png)
-    
-
-
-
-```python
-
-```
+# %%

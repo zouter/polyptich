@@ -1,4 +1,5 @@
-from polyptich.grid.grid import Grid, Panel
+from polyptich.grid.panel import Panel
+from polyptich.grid.grid import Grid
 import numpy as np
 import pandas as pd
 import dataclasses
