@@ -43,3 +43,9 @@ def get_tmp():
     folder = get_git_root() / "tmp"
     folder.mkdir(exist_ok=True)
     return folder
+
+def results():
+    # get current working dir
+    code_path = pathlib.Path.cwd()
+    results_path = get_results() / code_path.relative_to(get_code())
+    return results_path
