@@ -13,6 +13,7 @@ python -m build
 # twine upload --repository testpypi dist/polyptich-${version}.tar.gz --verbose
 
 git push --tags
+git push
 
 # conda install gh --channel conda-forge
 gh release create v${version} -t "v${version}" -n "v${version}" dist/polyptich-${version}.tar.gz
