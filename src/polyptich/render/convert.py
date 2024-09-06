@@ -16,6 +16,9 @@ def convert(file):
     output_ipynb = (paths.get_results() / file.relative_to(paths.get_code())).with_suffix('.ipynb')
     output_html = (paths.get_results() / file.relative_to(paths.get_code())).with_suffix('.html')
 
+    if not output_ipynb.parent.exists():
+        output_ipynb.parent.mkdir(parents=True)
+
     subprocess.run(f'jupytext --to notebook {file} -o {output_ipynb}', shell=True, check=True)
 
     print(f'Executing {output_ipynb}')

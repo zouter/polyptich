@@ -28,6 +28,7 @@ class Wrap(Element):
 
     def __init__(
         self,
+        elements = None,
         ncol: int = 6,
         padding_width: float = 0.5,
         padding_height: Optional[float] = None,
@@ -41,7 +42,11 @@ class Wrap(Element):
         )
         self.margin_width: float = margin_width
         self.margin_height: float = margin_height
-        self.elements: List[Element] = []
+
+        if elements is not None:
+            self.elements = elements
+        else:
+            self.elements = []
         self.pos: Tuple[int, int] = (0, 0)
 
     def add(self, element: Element):

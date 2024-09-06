@@ -48,3 +48,30 @@ fig.main = title / (ax1 | ax2) / (ax3 | ax4) / legend
 fig.display()
 
 # %%
+fig = pp.Figure()
+
+axes = []
+
+ax1 = pp.Panel((2, 2))
+ax1.plot([1, 2, 3], [1, 2, 3])
+axes.append(ax1)
+
+ax2 = pp.Panel((2, 2))
+ax2.barh([1, 2, 3], [1, 2, 3])
+axes.append(ax2)
+
+ax3 = pp.Panel((2, 2))
+ax3.scatter([1, 2, 3], [3, 1, 2])
+axes.append(ax3)
+
+ax4 = pp.Panel((2, 2))
+ax4.matshow([[1, 2], [3, 4]])
+axes.append(ax4)
+
+
+fig.main = pp.Wrap(ncol = 4, elements = axes)
+for ax in axes:
+    fig.main.add(ax)
+
+
+fig.display()
