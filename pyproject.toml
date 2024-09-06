@@ -24,8 +24,8 @@ dynamic = ["version", "readme"]
 license = {text = "MIT"}
 
 [project.urls]
-"Homepage" = "https://github.com/probabilistic-cell/polyptich"
-"Bug Tracker" = "https://github.com/probabilistic-cell/polyptich/issues"
+"Homepage" = "https://github.com/zouter/polyptich"
+"Bug Tracker" = "https://github.com/zouter/polyptich/issues"
 
 [tool.setuptools.dynamic]
 readme = {file = "README.md", content-type = "text/markdown"}

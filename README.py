@@ -67,6 +67,5 @@ ax4 = pp.Panel((2, 2))
 ax4.matshow([[1, 2], [3, 4]])
 axes.append(ax4)
 
-# %%
-fig.main = pp.Wrap(axes, ncol = 4)
+fig.main = pp.Wrap(axes, ncol = 3)
 fig.display()
