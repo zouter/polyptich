@@ -24,7 +24,7 @@ fig.display()
 
 
     
-![png](README_files/README_2_0.png)
+![png](https://github.com/zouter/polyptich/blob/master/README_files/README_2_0.png?raw=True)
     
 
 
@@ -57,7 +57,7 @@ fig.display()
 
 
     
-![png](README_files/README_3_0.png)
+![png](https://github.com/zouter/polyptich/blob/master/README_files/README_3_0.png?raw=True)
     
 
 
@@ -88,7 +88,7 @@ fig.display()
 
 
     
-![png](README_files/README_4_0.png)
+![png](https://github.com/zouter/polyptich/blob/master/README_files/README_4_0.png?raw=True)
     
 
 
@@ -118,27 +118,43 @@ var["color"] = modules.loc[var["module"]]["color"].values
 
 ```python
 fig = pp.Figure(pp.Grid(padding_height = 0., padding_width = 0.))
-row_layout = pp.heatmap.layouts.Simple()
+
 row_layout = pp.heatmap.layouts.Broken(var["module"].astype("category"))
 col_layout = pp.heatmap.layouts.Broken(obs["celltype"].astype("category"))
 
 main_heatmap = fig.main.add(pp.heatmap.Heatmap(data, row_layout = row_layout, col_layout = col_layout))
-heading = fig.main.add_above(pp.heatmap.heading.HeadingTop(obs, col_layout, celltypes))
-# ticks = fig.main.add_under(pp.heatmap.ticks.TicksBottom(obs, col_layout), column = main_heatmap)
+heading = fig.main.add_above(pp.heatmap.heading.HeadingTop(obs, celltypes, col_layout))
 
 ticks = fig.main.add_left(pp.heatmap.ticks.TicksLeft(var, row_layout), row = main_heatmap)
-heading = fig.main.add_left(pp.heatmap.heading.HeadingLeft(var, row_layout, modules), row = main_heatmap)
+heading = fig.main.add_right(pp.heatmap.heading.HeadingRight(var, modules, row_layout), row = main_heatmap)
 
 fig.display()
 ```
 
 
     
-![png](README_files/README_6_0.png)
+![png](https://github.com/zouter/polyptich/blob/master/README_files/README_6_0.png?raw=True)
     
 
 
 
 ```python
+fig = pp.Figure(pp.Grid(padding_height = 0., padding_width = 0.))
 
+row_layout = pp.heatmap.layouts.Broken(var["module"].astype("category"))
+col_layout = pp.heatmap.layouts.Broken(obs["celltype"].astype("category"))
+
+main_heatmap = fig.main.add(pp.heatmap.Heatmap(data, row_layout = row_layout, col_layout = col_layout))
+heading = fig.main.add_above(pp.heatmap.heading.HeadingTop(obs, celltypes, col_layout))
+
+ticks = fig.main.add_right(pp.heatmap.ticks.TicksRight(var, row_layout), row = main_heatmap)
+heading = fig.main.add_left(pp.heatmap.heading.HeadingLeft(var, modules, row_layout), row = main_heatmap)
+
+fig.display()
 ```
+
+
+    
+![png](https://github.com/zouter/polyptich/blob/master/README_files/README_7_0.png?raw=True)
+    
+

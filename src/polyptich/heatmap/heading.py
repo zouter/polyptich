@@ -3,24 +3,28 @@ import matplotlib as mpl
 
 
 class Heading(pp.Grid):
-    def __init__(self, data, layout, info, margin=0., orientation="top"):
+    def __init__(self, data, info, layout = None, margin=None, orientation="top"):
+        if layout is None:
+            layout = pp.heatmap.layouts.Simple()
         if orientation == "top":
             super().__init__(
-                margin_bottom=margin, padding_height=0.0,  padding_width=layout.padding
+                margin_bottom=layout.padding if margin is None else margin, padding_height=0.0,  padding_width=layout.padding
             )
         elif orientation == "right":
             super().__init__(
-                margin_left=margin, padding_width=0.0,  padding_height=layout.padding
+                margin_left=layout.padding if margin is None else margin, padding_width=0.0,  padding_height=layout.padding
             )
         elif orientation == "bottom":
             super().__init__(
-                margin_top=margin, padding_height=0.0,  padding_width=layout.padding
+                margin_top=layout.padding if margin is None else margin, padding_height=0.0,  padding_width=layout.padding
             )
         elif orientation == "left":
             super().__init__(
-                margin_right=margin, padding_width=0.0,  padding_height=layout.padding
+                margin_right=layout.padding if margin is None else margin, padding_width=0.0,  padding_height=layout.padding
             )
         for i, name, df, width in layout.iter(data):
+            if name is None:
+                continue
             if name not in info.index:
                 raise ValueError(f"Name {name} not found in info")
             if "label" in info.columns:
