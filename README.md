@@ -81,20 +81,64 @@ axes.append(ax3)
 ax4 = pp.Panel((2, 2))
 ax4.matshow([[1, 2], [3, 4]])
 axes.append(ax4)
-```
 
-
-    <_Figure size 640x480 with 0 Axes>
-
-
-
-```python
-fig.main = pp.Wrap(axes, ncol = 4)
+fig.main = pp.Wrap(axes, ncol = 3)
 fig.display()
 ```
 
 
     
-![png](README_files/README_5_0.png)
+![png](README_files/README_4_0.png)
     
 
+
+
+```python
+import pandas as pd
+import numpy as np
+data = pd.DataFrame(np.random.randn(1000, 20))
+obs = pd.DataFrame({
+    "celltype":["Kupffer cells"] * 300 + ["Stellate cells"] * 300 + ["Stupid cells"] * 400
+})
+celltypes = pd.DataFrame.from_dict({
+    "Kupffer cells": {"color": "red"},
+    "Stellate cells": {"color": "blue"},
+    "Stupid cells": {"color": "green"}
+}, orient = "index")
+var = pd.DataFrame(index = [f"gene_{i}" for i in range(20)])
+var["module"] = ["module_1"] * 5 + ["module_2"] * 5 + ["module_3"] * 10
+data.columns = var.index
+modules = pd.DataFrame({
+    "module":["module_1", "module_2", "module_3"],
+    "color":["red", "blue", "green"]
+}).set_index("module")
+var["color"] = modules.loc[var["module"]]["color"].values
+```
+
+
+```python
+fig = pp.Figure(pp.Grid(padding_height = 0., padding_width = 0.))
+row_layout = pp.heatmap.layouts.Simple()
+row_layout = pp.heatmap.layouts.Broken(var["module"].astype("category"))
+col_layout = pp.heatmap.layouts.Broken(obs["celltype"].astype("category"))
+
+main_heatmap = fig.main.add(pp.heatmap.Heatmap(data, row_layout = row_layout, col_layout = col_layout))
+heading = fig.main.add_above(pp.heatmap.heading.HeadingTop(obs, col_layout, celltypes))
+# ticks = fig.main.add_under(pp.heatmap.ticks.TicksBottom(obs, col_layout), column = main_heatmap)
+
+ticks = fig.main.add_left(pp.heatmap.ticks.TicksLeft(var, row_layout), row = main_heatmap)
+heading = fig.main.add_left(pp.heatmap.heading.HeadingLeft(var, row_layout, modules), row = main_heatmap)
+
+fig.display()
+```
+
+
+    
+![png](README_files/README_6_0.png)
+    
+
+
+
+```python
+
+```
