@@ -55,6 +55,12 @@ class Ax(Element):
 
     Parameters
     ----------
+    dim : tuple
+        The dimensions of the panel in inches
+    pos : tuple
+        The position of the panel in inches
+    fig : polyptich.Figure
+        The figure the panel belongs to
 
     """
 

@@ -72,7 +72,7 @@ class _Figure(mpl.figure.Figure):
             )
             ax.set_position(new_bbox)
 
-    def savefig(self, *args, dpi=100, bbox_inches="tight", display=True, **kwargs):
+    def savefig(self, *args, dpi=300, bbox_inches="tight", display=True, **kwargs):
         self.plot()
 
         plt.close()
@@ -84,11 +84,11 @@ class _Figure(mpl.figure.Figure):
         if IPython.get_ipython() is not None and display and not str(args[0]).endswith(".pdf"):
             IPython.display.display(IPython.display.Image(args[0], retina=True))
 
-    def display(self):
+    def display(self, **kwargs):
         import tempfile
 
         file = tempfile.NamedTemporaryFile(suffix=".png")
-        self.savefig(file.name, display=True)
+        self.savefig(file.name, display=True, **kwargs)
 
 
 def Figure(main: Element = None, *args, **kwargs):

@@ -7,8 +7,23 @@ import dataclasses
 
 @dataclasses.dataclass
 class Breaking:
+    """
+    Breaking of a genome into distinct regions
+
+    Parameters
+    ----------
+    regions : pd.DataFrame
+        DataFrame with columns "start" and "end" defining the regions
+    gap : int   
+        Gap between regions in inches
+    resolution : int
+        Number of base pairs per inch
+    """
+
     regions: pd.DataFrame
+
     gap: int = 0.05
+
     resolution: int = 2500
 
     @property

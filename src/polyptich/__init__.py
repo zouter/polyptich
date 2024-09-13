@@ -2,6 +2,7 @@ from . import grid
 from .grid import Panel, Figure, Wrap, Grid, Title
 from .utils import case_when
 from . import paths
+from . import heatmap
 
 
 def setup_ipython():

@@ -32,16 +32,20 @@ class Wrap(Element):
         ncol: int = 6,
         padding_width: float = 0.5,
         padding_height: Optional[float] = None,
-        margin_height: float = 0.5,
-        margin_width: float = 0.5,
+        margin_left: float = 0.,
+        margin_right: float = 0.,
+        margin_top: float = 0.,
+        margin_bottom: float = 0.,
     ):
         self.ncol: int = ncol
         self.padding_width: float = padding_width
         self.padding_height: Optional[float] = (
             padding_height if padding_height is not None else padding_width
         )
-        self.margin_width: float = margin_width
-        self.margin_height: float = margin_height
+        self.margin_left: float = margin_left
+        self.margin_right: float = margin_right
+        self.margin_top: float = margin_top
+        self.margin_bottom: float = margin_bottom
 
         if elements is not None:
             self.elements = elements
@@ -61,8 +65,8 @@ class Wrap(Element):
         width = 0
         height = 0
         nrow = 1
-        x = 0
-        y = 0
+        x = self.margin_left
+        y = self.margin_bottom
         next_y = 0
 
         if self.title is not None:
@@ -84,6 +88,9 @@ class Wrap(Element):
                 nrow += 1
                 x = 0
                 y = next_y
+
+        # width += self.margin_right
+        height += self.margin_top
 
         if self.title is not None:
             self.title.dim = (width, self.title.dim[1])
@@ -190,10 +197,7 @@ class Grid(Element):
         The width padding between elements in the grid. Defaults to 0.5. Note that this can be overridden for individual elements in the `add`, `add_under`, and `add_right` methods.
     padding_height
         The height padding between elements in the grid. If not provided, it defaults to the value of padding_width. Defaults to None.  Note that this can be overridden for individual elements in the `add`, `add_under`, and `add_right` methods.
-    margin_height
-        The height margin around the grid. Defaults to 0.5.
-    margin_width
-        The width margin around the grid. Defaults to 0.5.
+
     """
 
     title = None
@@ -204,13 +208,18 @@ class Grid(Element):
         ncol: int = 1,
         padding_width: float = 0.5,
         padding_height: Optional[float] = None,
-        margin_height: float = 0.5,
-        margin_width: float = 0.5,
+        
+        margin_left: float = 0.,
+        margin_right: float = 0.,
+        margin_top: float = 0.,
+        margin_bottom: float = 0.,
     ) -> None:
         self.padding_width = padding_width
         self.padding_height = padding_height if padding_height is not None else padding_width
-        self.margin_width = margin_width
-        self.margin_height = margin_height
+        self.margin_left = margin_left
+        self.margin_right = margin_right
+        self.margin_top = margin_top
+        self.margin_bottom = margin_bottom
         self.elements: List[List[Optional[Element]]] = [
             [None for _ in range(ncol)] for _ in range(nrow)
         ]
@@ -221,10 +230,9 @@ class Grid(Element):
         self.paddings_width: List[Optional[float]] = [None] * (ncol)
 
     def align(self):
-        width = 0
-        height = 0
-        x = 0
-        y = 0
+        width = self.margin_left
+        height = self.margin_top
+        y = self.margin_top
         next_y = 0
 
         if self.title is not None:
@@ -266,11 +274,11 @@ class Grid(Element):
             el.height = max(heights)
 
         for row, (row_elements, el_height) in enumerate(zip(self.elements, heights)):
-            padding_height = self.paddings_height[min(row + 1, self.nrow - 1)]
+            padding_height = self.paddings_height[min(row, self.nrow - 1)]
             if padding_height is None:
                 padding_height = self.padding_height
 
-            x = 0
+            x = self.margin_left
             for col, (el, el_width) in enumerate(zip(row_elements, widths)):
                 if el is not None:
                     el.pos = (x, y)
@@ -289,6 +297,9 @@ class Grid(Element):
 
         if self.title is not None:
             self.title.dim = (width, self.title.dim[1])
+
+        width += self.margin_right
+        height += self.margin_bottom
 
         self.dim = (width, height)
 
@@ -380,6 +391,13 @@ class Grid(Element):
             self.paddings_width[column - 1] = padding_width_left
         return el
 
+    def find(self, el):
+        for i, row_elements in enumerate(self.elements):
+            for j, el_ in enumerate(row_elements):
+                if el_ is el:
+                    return i, j
+        raise ValueError("Element not found in grid")
+
     def add_under(self, el, column=0, padding=None, padding_up=None):
         """
         Add an element under another element
@@ -402,16 +420,56 @@ class Grid(Element):
             row = self.nrow
 
         # get column index if column is a panel
-        if "grid.Element" in column.__class__.__mro__.__repr__():
-            try:
-                column = np.array(self.elements).flatten().tolist().index(column) % self.ncol
-            except ValueError as e:
-                raise ValueError("The panel specified as column was not found in the grid") from e
+        if "grid.element.Element" in column.__class__.__mro__.__repr__():
+            _, column = self.find(column)
         if not isinstance(column, int):
             raise TypeError("column must be an integer, not " + str(column))
         self[row, column] = el
         if padding is not None:
             self.paddings_height[row] = padding
+        return el
+
+
+    def add_above(self, el, column=0, padding=None, padding_up=None):
+        """
+        Add an element above
+
+        Parameters
+        ----------
+        el:
+            The element to add
+        column:
+            The column to add the element to. Defaults to 0. Can be an Element, in which case the column is determined by the position of the element in the grid.
+        padding:
+            The height padding between the element and the previous element.
+        padding_up:
+            The height padding between the element and the next element.
+        """
+
+        row = 0
+
+        # get column index if column is a panel
+        if "grid.element.Element" in column.__class__.__mro__.__repr__():
+            _, column = self.find(column)
+        if not isinstance(column, int):
+            raise TypeError("column must be an integer, not " + str(column))
+
+        self.shift_down(el)
+
+        return el
+
+    def add_left(self, el, row=0, padding=None, padding_left=None):
+        if "grid.element.Element" in row.__class__.__mro__.__repr__():
+            row, _ = self.find(row)
+        if not isinstance(row, int):
+            raise TypeError("row must be an integer, not " + str(row))
+
+        if self[row, 0] is None:
+            self[row, 0] = el
+        else:
+            self.shift_right()
+            self[row, 0] = el
+
         return el
 
     def add_right(self, el, row=0, padding=None):
@@ -429,7 +487,7 @@ class Grid(Element):
         """
 
         # get row
-        if "grid.Element" in row.__class__.__mro__.__repr__():
+        if "grid.element.Element" in row.__class__.__mro__.__repr__():
             try:
                 row = np.array(self.elements).flatten().tolist().index(row) // self.ncol
             except ValueError as e:
@@ -493,9 +551,9 @@ class Grid(Element):
         else:
             self.add_under(other)
             return self
-        # grid = Grid(padding_height = 0.)
-        # grid.add_under(self)
-        # grid.add_under(other)
+        grid = Grid(padding_height = 0.)
+        grid.add_under(self)
+        grid.add_under(other)
         return grid
 
     @property
@@ -513,5 +571,13 @@ class Grid(Element):
         self.paddings_height = [None, *self.paddings_height]
 
         self.elements = new_elements
+
+        return self
+
+    def shift_right(self):
+        for i, row in enumerate(self.elements):
+            new_row = [None, *row]
+            self.elements[i] = new_row
+        self.paddings_width = [None, *self.paddings_width]
 
         return self
