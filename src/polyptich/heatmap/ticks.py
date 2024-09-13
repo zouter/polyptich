@@ -6,7 +6,7 @@ class Ticks(pp.Grid):
     def __init__(self, data, layout, margin=0., orientation="top", size = 1.):
         if orientation == "top":
             super().__init__(
-                margin_bottom=size, padding_height=0.0,  padding_width=layout.padding, margin_top = 0
+                margin_top=size, padding_height=0.0,  padding_width=layout.padding, margin_bottom = 0
             )
         elif orientation == "right":
             super().__init__(
@@ -14,7 +14,7 @@ class Ticks(pp.Grid):
             )
         elif orientation == "bottom":
             super().__init__(
-                margin_top=size, padding_height=0.0,  padding_width=layout.padding, margin_bottom = 0
+                margin_bottom=size, padding_height=0.0,  padding_width=layout.padding, margin_top = 0
             )
         elif orientation == "left":
             super().__init__(
@@ -30,21 +30,13 @@ class Ticks(pp.Grid):
             elif orientation == "left":
                 ax = self[i, 0] = pp.Panel((0.01, width))
 
-            # rect = mpl.patches.Rectangle(
-            #     (0, 0),
-            #     1,
-            #     1,
-            #     color = color,
-            #     alpha=0.5,
-            # )
-            # ax.add_patch(rect)
-
             ax.axis("on")
             ax.set_xticks([])
             ax.set_yticks([])
             if orientation in ["top", "bottom"]:
                 ax.set_xticks(range(df.shape[0]))
-                ax.set_xticklabels(df.index)
+                label_kwargs = dict(rotation = 90, ha = "center", va = "top" if orientation == "bottom" else "bottom", fontsize = 10)
+                ax.set_xticklabels(df.index, **label_kwargs)
                 ax.set_xlim(-0.5, df.shape[0]-0.5)
             elif orientation in ["right", "left"]:
                 ax.set_yticks(range(df.shape[0]))
