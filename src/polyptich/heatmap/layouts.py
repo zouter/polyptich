@@ -19,16 +19,16 @@ class Layout():
         return size
 
 class Simple(Layout):
-    def __init__(self, padding = 0.05):
-        super().__init__(padding = padding)
+    def __init__(self, padding = 0.05, size = None, resolution = None):
+        super().__init__(padding = padding, size = size, resolution = resolution)
 
     def iter(self, data):
         yield 0, None, data, self.size(data)
 
 import pandas as pd
 class Broken(Layout):
-    def __init__(self, split:pd.Series, padding = 0.05):
-        super().__init__(padding = padding)
+    def __init__(self, split:pd.Series, padding = 0.05, size = None, resolution = None):
+        super().__init__(padding = padding, size = size, resolution = resolution)
         # make sure is categorical
         if not pd.api.types.is_categorical_dtype(split):
             raise ValueError("split must be categorical")
@@ -43,8 +43,8 @@ class Broken(Layout):
             yield i, name, df, size
 
 class Clustered(Layout):
-    def __init__(self, padding = 0.05):
-        super().__init__(padding = padding)
+    def __init__(self, padding = 0.05, size = None, resolution = None):
+        super().__init__(padding = padding, size = size, resolution = resolution)
         pass
 
 class BrokenClustered(Layout):

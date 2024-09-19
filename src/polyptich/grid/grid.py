@@ -194,13 +194,23 @@ class Grid(Element):
     ncol:
         The number of columns in the grid. Defaults to 1.
     padding_width
-        The width padding between elements in the grid. Defaults to 0.5. Note that this can be overridden for individual elements in the `add`, `add_under`, and `add_right` methods.
+        The width padding between elements in the grid. Defaults to 0.5. Note that this can be overridden for individual elements in the `add`, `add_under`, and `add_right` methods, or alternatively by changing the `paddings_width` attribute.
     padding_height
         The height padding between elements in the grid. If not provided, it defaults to the value of padding_width. Defaults to None.  Note that this can be overridden for individual elements in the `add`, `add_under`, and `add_right` methods.
 
     """
 
     title = None
+
+    paddings_height = None
+    """
+    A list containing the height padding between elements in the grid. If an element is None, the value of padding_height is used as default. 
+    """
+
+    paddings_width = None
+    """
+    A list containing the width padding between elements in the grid. If an element is None, the value of padding_width is used as default.
+    """
 
     def __init__(
         self,
@@ -445,8 +455,6 @@ class Grid(Element):
         padding_up:
             The height padding between the element and the next element.
         """
-
-        row = 0
 
         # get column index if column is a panel
         if "grid.element.Element" in column.__class__.__mro__.__repr__():

@@ -1,9 +1,30 @@
 import polyptich as pp
 import matplotlib as mpl
-
+import numpy as np
+import pandas as pd
 
 class Heading(pp.Grid):
-    def __init__(self, data, info, layout = None, margin=None, orientation="top"):
+    """
+    Heading for multiple groups in a heatmap
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        Information about rows/columns
+    info : pd.DataFrame
+        Information about the different groups. Can contain columns:
+        - label: the label to display
+        - color: the color to use
+    layout :
+        Layout of the heatmap rows or columns
+    margin : float
+        Margin to use between the heatmap and the heading
+    orientation : str
+        Where to place the heading. Can be "top", "right", "bottom" or "left"
+
+    
+    """
+    def __init__(self, data:pd.DataFrame, info:pd.DataFrame, layout = None, margin=None, orientation="top"):
         if layout is None:
             layout = pp.heatmap.layouts.Simple()
         if orientation == "top":
@@ -61,17 +82,21 @@ class Heading(pp.Grid):
                 text = ax.text(0.5, 0.5, label, ha="center", va="center", fontsize=10, color="white", rotation=90 if orientation == "left" else -90)
 
 class HeadingTop(Heading):
-    def __init__(self, data, layout, info, margin=0.):
+    __doc__ = Heading.__doc__
+    def __init__(self, data, layout, info, margin=None):
         super().__init__(data, layout, info, margin=margin, orientation="top")
 
 class HeadingRight(Heading):
-    def __init__(self, data, layout, info, margin=0.):
+    __doc__ = Heading.__doc__
+    def __init__(self, data, layout, info, margin=None):
         super().__init__(data, layout, info, margin=margin, orientation="right")
 
 class HeadingBottom(Heading):
-    def __init__(self, data, layout, info, margin=0.):
+    __doc__ = Heading.__doc__
+    def __init__(self, data, layout, info, margin=None):
         super().__init__(data, layout, info, margin=margin, orientation="bottom")
 
 class HeadingLeft(Heading):
-    def __init__(self, data, layout, info, margin=0.):
+    __doc__ = Heading.__doc__
+    def __init__(self, data, layout, info, margin=None):
         super().__init__(data, layout, info, margin=margin, orientation="left")
