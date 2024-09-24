@@ -32,3 +32,26 @@ class Heatmap(pp.Grid):
                 ax.set_yticks([])
                 ax.grid(False)
                 
+
+class TopPanels(pp.Grid):
+    def __init__(
+        self,
+        data,
+        col_layout,
+        height = 1,
+        obs = None,
+        var = None,
+        cmap="viridis",
+        norm = None,
+        margin = 0.,
+        **kwargs,
+    ):
+        if col_layout is None:
+            col_layout = layouts.Simple()
+
+        super().__init__(padding_width=col_layout.padding, padding_height=0, margin_bottom=margin)
+        
+        if norm is None:
+            norm = mpl.colors.Normalize(vmin=data.min().min(), vmax=data.max().max())
+        for i, name_col, data_cell, col_width in col_layout.iter(data):
+            ax = self[0, i] = pp.Panel((col_width, height))

@@ -1,4 +1,4 @@
-from .heatmap import Heatmap
+from .heatmap import Heatmap, TopPanels
 from .layouts import Simple
 from .heading import Heading
 from . import layouts
