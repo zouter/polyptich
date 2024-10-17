@@ -38,8 +38,8 @@ class Broken(Grid):
     A grid build from distinct regions that are using the same coordinate space
     """
 
-    def __init__(self, breaking, height=0.5, margin_height=0.0, *args, **kwargs):
-        super().__init__(padding_width=breaking.gap, margin_height=margin_height, *args, **kwargs)
+    def __init__(self, breaking, height=0.5, margin_top=0.0, *args, **kwargs):
+        super().__init__(padding_width=breaking.gap, margin_top=margin_top, *args, **kwargs)
 
         regions = breaking.regions
 

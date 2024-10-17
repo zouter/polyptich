@@ -97,18 +97,18 @@ class Ticks(pp.Grid):
         
 
 class TicksLeft(Ticks):
-    def __init__(self, data, layout, margin=0., size = 1, **kwargs):
+    def __init__(self, data, layout = None, margin=0., size = 1, **kwargs):
         super().__init__(data, layout, margin = margin, orientation = "left", size = size, **kwargs)
 
 class TicksRight(Ticks):
-    def __init__(self, data, layout, margin=0., size = 1, **kwargs):
+    def __init__(self, data, layout = None, margin=0., size = 1, **kwargs):
         super().__init__(data, layout, margin = margin, orientation = "right", size = size, **kwargs)
 class TicksBottom(Ticks):
-    def __init__(self, data, layout, margin=0., size = 1, **kwargs):
+    def __init__(self, data, layout = None, margin=0., size = 1, **kwargs):
         super().__init__(data, layout, margin = margin, orientation = "bottom", size = size, **kwargs)
 
 class TicksTop(Ticks):
-    def __init__(self, data, layout, margin=0., size = 1, **kwargs):
+    def __init__(self, data, layout = None, margin=0., size = 1, **kwargs):
         super().__init__(data, layout, margin = margin, orientation = "top", size = size, **kwargs)
 
 # class SmartTicks():
