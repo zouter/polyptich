@@ -214,6 +214,7 @@ class Grid(Element):
 
     def __init__(
         self,
+        elements = None,
         nrow: int = 1,
         ncol: int = 1,
         padding_width: float = 0.5,
@@ -230,9 +231,13 @@ class Grid(Element):
         self.margin_right = margin_right
         self.margin_top = margin_top
         self.margin_bottom = margin_bottom
-        self.elements: List[List[Optional[Element]]] = [
-            [None for _ in range(ncol)] for _ in range(nrow)
-        ]
+
+        if elements is not None:
+            self.elements = elements
+        else:
+            self.elements: List[List[Optional[Element]]] = [
+                [None for _ in range(ncol)] for _ in range(nrow)
+            ]
 
         self.pos: Tuple[int, int] = (0, 0)
 
