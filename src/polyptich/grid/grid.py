@@ -234,6 +234,8 @@ class Grid(Element):
 
         if elements is not None:
             self.elements = elements
+            nrow = len(elements)
+            ncol = len(elements[0])
         else:
             self.elements: List[List[Optional[Element]]] = [
                 [None for _ in range(ncol)] for _ in range(nrow)
@@ -442,6 +444,8 @@ class Grid(Element):
         self[row, column] = el
         if padding is not None:
             self.paddings_height[row] = padding
+        if padding_up is not None:
+            self.paddings_height[row - 1] = padding_up
         return el
 
 

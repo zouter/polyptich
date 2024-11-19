@@ -5,11 +5,12 @@ import numpy as np
 
 class Ticks(pp.Grid):
     def __init__(self, data, layout = None, margin=0., orientation="top", size = 1., label_column = "label", fontsize = 10):
+        data = data.copy()
         if layout is None:
             layout = pp.heatmap.layouts.Simple()
         if orientation == "top":
             super().__init__(
-                margin_top=size, padding_height=0.0,  padding_width=layout.padding, margin_bottom = 0
+                margin_top=size, padding_height=0.0,  padding_width=layout.padding, margin_bottom = 0,
             )
         elif orientation == "right":
             super().__init__(

@@ -3,6 +3,7 @@ from polyptich.grid.grid import Grid
 import numpy as np
 import pandas as pd
 import dataclasses
+import matplotlib as mpl
 
 
 @dataclasses.dataclass
@@ -77,9 +78,9 @@ class BrokenGrid(Grid):
     """
 
     def __init__(
-        self, breaking, height=0.5, padding_height=0.05, margin_height=0.0, *args, **kwargs
+        self, breaking, height=0.5, padding_height=0.05, margin_top=0.0, *args, **kwargs
     ):
-        super().__init__(padding_width=breaking.gap, margin_height=margin_height, *args, **kwargs)
+        super().__init__(padding_width=breaking.gap, margin_top=margin_top, *args, **kwargs)
 
         regions = breaking.regions
 
@@ -92,7 +93,7 @@ class BrokenGrid(Grid):
 
         for i, (region, region_info) in enumerate(regions.iterrows()):
             _ = self.add_right(
-                Grid(padding_height=padding_height, margin_height=0.0),
+                Grid(padding_height=padding_height, margin_top=0.0),
             )
 
 
@@ -129,7 +130,7 @@ class TransformBroken:
             "ix"
         ] * breaking.gap * breaking.resolution
         regions["cumend"] = (
-            np.cumsum(regions["width"]) + regions["ix"] * breaking.gap / breaking.resolution
+            np.cumsum(regions["width"]) + regions["ix"] * breaking.gap * breaking.resolution
         )
 
         self.regions = regions
@@ -175,3 +176,104 @@ class TransformBroken:
         y[allzero] = np.nan
 
         return y
+
+
+
+
+
+class Expanding(Panel):
+    """
+    Shows all genes in the regions, with a "zoom-in" effect towards the regions of interest.
+
+    Parameters:
+        breaking1: polyptich.grid.Breaking
+            Broken grid
+        breaking2: polyptich.grid.Breaking
+            Broken grid
+        height: float
+            Height of the expansion
+
+    
+    """
+    def __init__(
+        self,
+        breaking1: Breaking,
+        breaking2: Breaking,
+        height: float = 0.2,
+        **kwargs,
+    ):
+        width = max(breaking1.width, breaking2.width)
+
+        if breaking1.width > breaking2.width:
+            scale_top = 1
+            scale_bottom = breaking2.width / breaking1.width
+        else:
+            scale_top = breaking1.width / breaking2.width
+            scale_bottom = 1
+        
+        super().__init__((width, height), **kwargs)
+
+        ax = self
+        ax.axis("off")
+
+        # breaking
+        from polyptich.grid.broken import TransformBroken
+        bt1 = TransformBroken(breaking1)
+        bt2 = TransformBroken(breaking2)
+        for i, (region, region_info) in enumerate(bt2.regions.iterrows()):
+            y0 = 1.2
+            y1 = 1
+            y2 = 0
+            end1 = bt1(region_info["end"])[0] / breaking1.regions["cumend"].max() * scale_top
+            start1 = bt1(region_info["start"])[0] / breaking1.regions["cumend"].max() * scale_top
+            end2 = bt2(region_info["end"])[0] / breaking2.regions["cumend"].max() * scale_bottom
+            start2 = bt2(region_info["start"])[0] / breaking2.regions["cumend"].max() * scale_bottom
+
+            control_point_height = 0.5
+
+            points = np.array([
+                [end1, y0], # top right
+                [end1, y1], # top right
+                [end1, control_point_height], # bottom right P1
+                [end2, control_point_height], # bottom right P2
+                [end2, y2], # bottom right
+                [start2,y2],   # bottom left
+                [start2, control_point_height], # bottom left P1
+                [start1, control_point_height], # bottom left P2
+                [start1, y1], # bottom left
+                [start1, y0], # top left
+            ])
+
+            # polygon
+            # polygon = mpl.patches.Polygon(
+            #     points,
+            #     fc="#CCCCCC",
+            #     lw=0.,
+            #     zorder=-2,
+            #     clip_on = False
+            # )
+
+            # smooth bezier path
+            Path = mpl.path.Path
+
+            path = mpl.path.Path(points, codes = [
+                Path.MOVETO,
+                Path.LINETO,
+                Path.CURVE4,
+                Path.CURVE4,
+                Path.CURVE4,
+                Path.LINETO,
+                Path.CURVE4,
+                Path.CURVE4,
+                Path.CURVE4,
+                Path.CLOSEPOLY
+            ])
+            
+            polygon = mpl.patches.PathPatch(
+                path,
+                fc="#D6D6D6" if i % 2 == 0 else "#E6E6E6",
+                lw=0.,
+                zorder=-2,
+                clip_on = False
+            )
+            ax.add_patch(polygon)
