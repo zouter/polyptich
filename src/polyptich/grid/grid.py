@@ -258,14 +258,10 @@ class Grid(Element):
         widths = [0] * self.ncol
         heights = [0] * self.nrow
 
-        assert len(self.paddings_height) == self.nrow, (
-            len(self.paddings_height),
-            self.nrow,
-        )
-        assert len(self.paddings_width) == self.ncol, (
-            len(self.paddings_width),
-            self.ncol,
-        )
+        if len(self.paddings_height) < self.nrow:
+            self.paddings_height.extend([None] * (self.nrow - len(self.paddings_height)))
+        if len(self.paddings_width) < self.ncol:
+            self.paddings_width.extend([None] * (self.ncol - len(self.paddings_width)))
 
         elements_to_auto_width = []
         elements_to_auto_height = []
