@@ -221,7 +221,7 @@ class Expanding(Panel):
         bt1 = TransformBroken(breaking1)
         bt2 = TransformBroken(breaking2)
         for i, (region, region_info) in enumerate(bt2.regions.iterrows()):
-            y0 = 1.2
+            y0 = 1.
             y1 = 1
             y2 = 0
             end1 = bt1(region_info["end"])[0] / breaking1.regions["cumend"].max() * scale_top

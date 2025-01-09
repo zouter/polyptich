@@ -272,6 +272,7 @@ class Grid(Element):
 
         for row, row_elements in enumerate(self.elements):
             for col, el in enumerate(row_elements):
+                print(el.height)
                 if el is not None:
                     el.align()
                     if el.width is None:

@@ -102,8 +102,8 @@ class Ax(Element):
         h = self.dim[1]
 
         # add some extra height if we have a title
-        if self.ax.get_title() != "":
-            h += TITLE_HEIGHT
+        # if self.ax.get_title() != "":
+        #     h += TITLE_HEIGHT
         if self.ax.axison:
             h += AXIS_HEIGHT
         return h
@@ -244,8 +244,8 @@ class Ax2(Element, mpl.figure.Axes):
             return None
 
         # add some extra height if we have a title
-        if self.get_title() != "":
-            h += TITLE_HEIGHT
+        # if self.get_title() != "":
+        #     h += TITLE_HEIGHT
         if self.axison:
             h += AXIS_HEIGHT
         return h

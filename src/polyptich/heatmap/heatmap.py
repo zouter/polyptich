@@ -22,7 +22,6 @@ class Heatmap(pp.Grid):
         super().__init__(padding_width=col_layout.padding, padding_height=row_layout.padding, margin_bottom=0., margin_right=0.)
         
         if norm is None:
-            print(data.values, data.values)
             norm = mpl.colors.Normalize(vmin=data.values.min(), vmax=data.values.max())
         for j, name_row, data_row, row_height in row_layout.iter(data.T):
             for i, name_col, data_cell, col_width in col_layout.iter(data_row.T):
