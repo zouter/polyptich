@@ -73,6 +73,10 @@ class _Figure(mpl.figure.Figure):
             ax.set_position(new_bbox)
 
     def savefig(self, *args, dpi=300, bbox_inches="tight", display=True, **kwargs):
+        """
+        Save the figure. If in an IPython environment, display the image.
+        
+        """
         self.plot()
 
         plt.close()
@@ -91,7 +95,7 @@ class _Figure(mpl.figure.Figure):
         self.savefig(file.name, display=True, **kwargs)
 
 
-def Figure(main: Element = None, *args, **kwargs):
+def Figure(main: Element = None, *args, **kwargs) -> _Figure:
     """
     Create a figure with panel support.
 

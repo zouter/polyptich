@@ -4,7 +4,7 @@ import numpy as np
 
 
 class Ticks(pp.Grid):
-    def __init__(self, data, layout = None, margin=0., orientation="top", size = 1., label_column = "label", fontsize = 10):
+    def __init__(self, data, layout = None, margin=0., orientation="top", size = 1., label_column = "label", fontsize = 10, rotation = None, ha = None, va = None):
         data = data.copy()
         if layout is None:
             layout = pp.heatmap.layouts.Simple()
@@ -50,8 +50,8 @@ class Ticks(pp.Grid):
             label_kwargs = dict(fontsize = fontsize)
             if orientation in ["top", "bottom"]:
                 label_kwargs = {
-                    "rotation": 90,
-                    "ha": "center",
+                    "rotation": 90 if rotation is None else rotation,
+                    "ha": "center" if ha is None else ha,
                     "va": "top" if orientation == "bottom" else "bottom",
                     **label_kwargs
                 }
