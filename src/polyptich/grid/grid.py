@@ -2,7 +2,7 @@ import numpy as np
 from typing import List, Optional, Tuple
 
 from .element import Element
-from .panel import Title
+from .panel import Title, Panel
 
 
 class Wrap(Element):
@@ -427,6 +427,9 @@ class Grid(Element):
             The height padding between the element and the next element.
         """
 
+        if isinstance(el, tuple):
+            el = Panel(el)
+
         if (self.nrow == 1) and self[0, 0] is None:
             row = 0
         else:
@@ -498,6 +501,8 @@ class Grid(Element):
         padding:
             The width padding between the element and the previous element.
         """
+        if isinstance(el, tuple):
+            el = Panel(el)
 
         # get row
         if "grid.element.Element" in row.__class__.__mro__.__repr__():

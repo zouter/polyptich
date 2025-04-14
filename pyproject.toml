@@ -19,6 +19,7 @@ classifiers = [
 dependencies = [
     "matplotlib",
     "numpy",
+    "pandas",
 ]
 dynamic = ["version", "readme"]
 license = {text = "MIT"}

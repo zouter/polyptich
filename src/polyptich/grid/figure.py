@@ -93,6 +93,7 @@ class _Figure(mpl.figure.Figure):
 
         file = tempfile.NamedTemporaryFile(suffix=".png")
         self.savefig(file.name, display=True, **kwargs)
+        plt.close()
 
 
 def Figure(main: Element = None, *args, **kwargs) -> _Figure:
