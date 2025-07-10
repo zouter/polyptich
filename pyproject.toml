@@ -22,7 +22,7 @@ dependencies = [
     "pandas",
 ]
 dynamic = ["version", "readme"]
-license = {text = "MIT"}
+license = "MIT"
 
 [project.urls]
 "Homepage" = "https://github.com/zouter/polyptich"

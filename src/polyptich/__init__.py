@@ -3,6 +3,7 @@ from .grid import Panel, Figure, Wrap, Grid, Title
 from .utils import case_when
 from . import paths
 from . import heatmap
+from . import annot
 
 
 def setup_ipython():
@@ -16,5 +17,5 @@ def setup_ipython():
         import os
         os.environ["ANYWIDGET_HMR"] = "1"
 
-__all__ = ["grid", "case_when"]
+__all__ = ["grid", "case_when", "annot"]
 

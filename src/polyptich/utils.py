@@ -17,8 +17,20 @@ def case_switch(default="other", *args):
     return np.array([*keys[::-1], default])[y]
 
 
+
+def case_if(choices, default="other"):
+    keys = list(choices.keys())
+    values = list(choices.values())
+    y = np.zeros(len(values[0]), dtype=int) + len(keys)
+    for i, (key, value) in enumerate({k: v for k, v in zip(keys[::-1], values[::-1])}.items()):
+        y[value] = i
+    return np.array([*keys[::-1], default])[y]
+
+
 def crossing(*dfs, **kwargs):
     dfs = [df.copy() if isinstance(df, pd.DataFrame) else df.to_frame() for df in dfs]
+    if any(len(df) == 0 for df in dfs):
+        return pd.DataFrame(columns = list(set().union(*(df.columns for df in dfs))))
     dfs.extend(pd.DataFrame({k: v}) for k, v in kwargs.items())
     for df in dfs:
         df["___key"] = 0

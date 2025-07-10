@@ -10,8 +10,7 @@ def get_git_root(cwd=None):
         cwd = os.getcwd()
     # go back until we find the git directory, signifying project root
     while (
-        ("code" not in os.listdir(cwd))
-        and ("output" not in os.listdir(cwd))
+        (".git" not in os.listdir(cwd))
         and os.path.realpath(cwd) != "/"
     ):
         cwd = os.path.dirname(cwd)

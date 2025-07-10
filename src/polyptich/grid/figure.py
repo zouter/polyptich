@@ -72,7 +72,7 @@ class _Figure(mpl.figure.Figure):
             )
             ax.set_position(new_bbox)
 
-    def savefig(self, *args, dpi=300, bbox_inches="tight", display=True, **kwargs):
+    def savefig(self, *args, dpi=300, bbox_inches="tight", display=False, **kwargs):
         """
         Save the figure. If in an IPython environment, display the image.
         
