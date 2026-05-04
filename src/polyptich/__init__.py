@@ -4,6 +4,7 @@ from .utils import case_when
 from . import paths
 from . import heatmap
 from . import annot
+from . import colormaps
 
 
 def setup_ipython():

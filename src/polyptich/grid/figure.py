@@ -85,7 +85,11 @@ class _Figure(mpl.figure.Figure):
 
         import IPython
 
-        if IPython.get_ipython() is not None and display and not str(args[0]).endswith(".pdf"):
+        if IPython.get_ipython() is not None and display and str(args[0]).endswith(".svg"):
+            from IPython.display import SVG
+
+            IPython.display.display(SVG(args[0]))
+        elif IPython.get_ipython() is not None and display and not str(args[0]).endswith(".pdf"):
             IPython.display.display(IPython.display.Image(args[0], retina=True))
 
     def display(self, **kwargs):
@@ -93,6 +97,13 @@ class _Figure(mpl.figure.Figure):
 
         file = tempfile.NamedTemporaryFile(suffix=".png")
         self.savefig(file.name, display=True, **kwargs)
+        plt.close()
+
+    def display_svg(self, **kwargs):
+        import tempfile
+
+        file = tempfile.NamedTemporaryFile(suffix=".svg")
+        self.savefig(file.name, format="svg", display=True, **kwargs)
         plt.close()
 
 
