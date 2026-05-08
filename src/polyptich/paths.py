@@ -38,6 +38,11 @@ def get_results():
     return get_git_root() / "results"
 
 
+def get_www():
+    return get_git_root() / "www"
+
+
+
 def get_tmp():
     folder = get_git_root() / "tmp"
     folder.mkdir(exist_ok=True)
