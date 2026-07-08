@@ -1,7 +1,10 @@
 import matplotlib as mpl
 
 # create a colormap that combines Set1, Set2 and Set3
-sets = [mpl.colormaps.get_cmap(name) for name in ["Set1", "Set2", "Set3"]]
+sets = [
+    mpl.colormaps[name] if hasattr(mpl, "colormaps") else mpl.cm.get_cmap(name)
+    for name in ["Set1", "Set2", "Set3"]
+]
 colors = []
 for cmap in sets:
     for i in range(cmap.N):
