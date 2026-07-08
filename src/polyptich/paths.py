@@ -41,6 +41,9 @@ def get_results():
 def get_www():
     return get_git_root() / "www"
 
+def get_config():
+    return get_git_root() / "config"
+
 
 
 def get_tmp():

@@ -17,6 +17,8 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
+    "flask",
+    "jinja2",
     "matplotlib",
     "numpy",
     "pandas",
@@ -27,6 +29,10 @@ license = "MIT"
 [project.urls]
 "Homepage" = "https://github.com/zouter/polyptich"
 "Bug Tracker" = "https://github.com/zouter/polyptich/issues"
+
+[project.scripts]
+polyptich-www = "polyptich.www.server:main"
+polyptich-www-examples = "polyptich.www.examples:main"
 
 [tool.setuptools.dynamic]
 readme = {file = "README.md", content-type = "text/markdown"}
@@ -39,6 +45,14 @@ test = [
     "pytest",
     "ruff",
 ]
+www = [
+    "openpyxl",
+    "plotly",
+    "pyarrow",
+]
+
+[tool.setuptools.package-data]
+"polyptich.www" = ["templates/*.html", "static/*.css", "static/*.js"]
 
 [tool.setuptools_scm]
 
