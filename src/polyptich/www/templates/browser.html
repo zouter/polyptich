@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>polyptich www: /{{ subpath }}</title>
+  <link rel="stylesheet" href="{{ url_for('static_files', filename='polyptich-www.css') }}">
+</head>
+<body>
+  <main class="browser">
+    <div class="topbar">
+      <div>
+        <h1>polyptich www: /{{ subpath }}</h1>
+        <p class="subtitle">Serving files from <code>{{ base_dir }}</code></p>
+      </div>
+      <div class="server-tools">
+        <span class="health health-ok" data-health-indicator data-health-url="{{ url_for('health') }}">Server online</span>
+        {% if allow_restart %}
+          <form class="restart-form" method="post" action="{{ url_for('restart') }}" data-restart-form>
+            <button type="submit">Restart server</button>
+          </form>
+        {% endif %}
+        <span class="summary">{{ item_count }} item{% if item_count != 1 %}s{% endif %}</span>
+      </div>
+    </div>
+
+    <ol class="breadcrumbs">
+      {% for crumb in breadcrumbs %}
+        <li>{% if not loop.first %}/{% endif %}<a href="{{ url_for('browse', subpath=crumb.path) }}">{{ crumb.label }}</a></li>
+      {% endfor %}
+    </ol>
+
+    <form class="controls" method="get">
+      <input type="search" name="q" value="{{ query }}" placeholder="Filter files, folders, and reports" aria-label="Filter files, folders, and reports">
+      <button type="submit">Filter</button>
+      {% if query %}<a class="button-link" href="{{ url_for('browse', subpath=subpath) if subpath else url_for('browse') }}">Clear</a>{% endif %}
+    </form>
+
+    {% if parent is not none %}
+      <div class="parent-link"><a href="{{ url_for('browse', subpath=parent) }}">Parent directory</a></div>
+    {% endif %}
+
+    {% if items %}
+      <table class="listing">
+        <thead><tr><th>Name</th><th>Kind</th><th>Actions</th><th class="right">Size</th><th class="right">Modified</th></tr></thead>
+        <tbody>
+          {% for item in items %}
+            <tr class="row-link" onclick="window.location.href='{{ item.href }}'">
+              <td><span class="icon icon-{{ item.icon }}"></span>{{ item.display_name }}</td>
+              <td>{{ item.kind }}</td>
+              <td>
+                {% if item.browse_href %}
+                  <a class="inline-action" href="{{ item.browse_href }}" onclick="event.stopPropagation()">Browse files</a>
+                {% endif %}
+                <form class="inline-delete" method="post" action="{{ item.delete_href }}" onclick="event.stopPropagation()" onsubmit="return confirm('Delete ' + {{ item.display_name|tojson }} + '? This cannot be undone.');">
+                  <button type="submit">Delete</button>
+                </form>
+              </td>
+              <td class="right mobile-label" data-label="Size">{{ item.size }}</td>
+              <td class="right mobile-label muted" data-label="Modified">{{ item.modified }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty">{% if query %}No items match <code>{{ query }}</code>.{% else %}This directory is empty.{% endif %}</div>
+    {% endif %}
+  </main>
+  <script src="{{ url_for('static_files', filename='polyptich-www.js') }}"></script>
+</body>
+</html>

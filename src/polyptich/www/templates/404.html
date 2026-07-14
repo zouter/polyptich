@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found</title>
+  <link rel="stylesheet" href="{{ url_for('static_files', filename='polyptich-www.css') }}">
+</head>
+<body>
+  <main class="error-page">
+    <div class="error-card card">
+      <p class="error-code">404</p>
+      <h1>Page not found</h1>
+      <p class="subtitle">No page exists at <code>{{ path }}</code>.</p>
+      <p><a class="www-button www-button-primary" href="{{ root_href }}">Go to site root</a></p>
+    </div>
+  </main>
+</body>
+</html>

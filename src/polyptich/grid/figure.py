@@ -42,6 +42,12 @@ class _Figure(mpl.figure.Figure):
             hook()
         return self
 
+    def close(self):
+        global active_fig
+        if active_fig is self:
+            active_fig = None
+        plt.close(self)
+
     def set_tight_bounds(self):
         """
         Sets the bounds of the figure so that all elements are visible
@@ -79,9 +85,8 @@ class _Figure(mpl.figure.Figure):
         """
         self.plot()
 
-        plt.close()
-
         super().savefig(*args, dpi=dpi, bbox_inches=bbox_inches, **kwargs)
+        self.close()
 
         import IPython
 
@@ -97,14 +102,14 @@ class _Figure(mpl.figure.Figure):
 
         file = tempfile.NamedTemporaryFile(suffix=".png")
         self.savefig(file.name, display=True, **kwargs)
-        plt.close()
+        self.close()
 
     def display_svg(self, **kwargs):
         import tempfile
 
         file = tempfile.NamedTemporaryFile(suffix=".svg")
         self.savefig(file.name, format="svg", display=True, **kwargs)
-        plt.close()
+        self.close()
 
 
 def Figure(main: Element = None, *args, **kwargs) -> _Figure:

@@ -5,6 +5,7 @@ from . import paths
 from . import heatmap
 from . import annot
 from . import colormaps
+from . import www
 
 
 def setup_ipython():
@@ -18,5 +19,4 @@ def setup_ipython():
         import os
         os.environ["ANYWIDGET_HMR"] = "1"
 
-__all__ = ["grid", "case_when", "annot"]
-
+__all__ = ["grid", "case_when", "annot", "www"]
