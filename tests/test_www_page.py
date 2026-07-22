@@ -156,6 +156,15 @@ def test_health_endpoint_reports_ok(tmp_path):
     assert response.get_json() == {"status": "ok"}
 
 
+def test_shared_ui_stylesheet_is_served(tmp_path):
+    client = load_create_app()(tmp_path).test_client()
+
+    response = client.get("/static/polyptich-ui.css")
+
+    assert response.status_code == 200
+    assert b".pt-button" in response.data
+
+
 def test_restart_endpoint_is_enabled_by_default(tmp_path):
     restarted = []
     client = load_create_app()(tmp_path, restart_callback=lambda: restarted.append(True)).test_client()

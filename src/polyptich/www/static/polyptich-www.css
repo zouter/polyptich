@@ -1,3 +1,5 @@
+@import url("./polyptich-ui.css");
+
 :root {
   color-scheme: light;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -81,23 +83,17 @@ h1, h2, h3 { line-height: 1.12; }
 .tab-panel { display: none; padding-top: 1rem; }
 .tab-panel.active { display: block; }
 .table-actions { margin-bottom: 0.65rem; }
-.www-button { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.55rem 0.85rem; border-radius: 0.6rem; border: 1px solid transparent; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
-.www-button-primary { background: #2554c7; color: white; }
-.www-button-secondary { background: white; border-color: #d0d5dd; color: #162033; }
+.www-button-secondary { background: var(--pt-surface); border-color: var(--pt-border-strong); color: var(--pt-text); }
 .www-button-subtle { background: #eef4ff; color: #1d4ed8; }
-.www-badge { display: inline-flex; align-items: center; border-radius: 999px; padding: 0.15rem 0.5rem; font-size: 0.82rem; font-weight: 700; background: #eef2f6; color: #475467; }
-.www-badge-success { background: #dcfae6; color: #067647; }
 .www-badge-warning { background: #fef0c7; color: #b54708; }
 .www-badge-danger { background: #fee4e2; color: #b42318; }
-.www-callout { border: 1px solid #d0d5dd; border-left-width: 0.3rem; border-radius: 0.8rem; padding: 0.85rem 1rem; background: white; margin: 0.8rem 0; }
+.www-callout { margin: 0.8rem 0; }
 .www-callout strong { display: block; margin-bottom: 0.3rem; }
 .www-callout-info { border-left-color: #2554c7; }
 .www-callout-success { border-left-color: #12b76a; }
 .www-callout-warning { border-left-color: #f79009; }
 .www-panel { border: 1px solid #e4e7ec; border-radius: 0.8rem; background: white; overflow: hidden; margin: 0.8rem 0; }
 .www-panel details { display: block; }
-.www-panel-header { display: flex; align-items: center; justify-content: space-between; gap: 0.65rem; padding: 0.8rem 0.95rem; border-bottom: 1px solid #e4e7ec; background: #f9fafb; }
-.www-panel-title { font-size: 0.92rem; font-weight: 700; color: #162033; }
 .www-panel details > summary.www-panel-header { cursor: pointer; list-style: none; user-select: none; }
 .www-panel details > summary.www-panel-header::-webkit-details-marker { display: none; }
 .www-panel details > summary.www-panel-header::before { content: ">"; font-size: 0.75rem; color: #667085; margin-right: 0.45rem; transition: transform 120ms ease; }
